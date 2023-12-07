@@ -6,7 +6,7 @@
     <h1>Liste des Livres</h1>
     <div class="book-container">
       <BookComponent
-        v-for="(book, index) in this.books"
+        v-for="(book, index) in books"
         :key="index"
         :title="book.title"
         :author="book.author"

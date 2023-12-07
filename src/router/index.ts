@@ -3,6 +3,7 @@ import Accueil from '../views/AccueilView.vue'
 import HomeView from '../views/HomeView.vue'
 import Login from '../views/LoginView.vue'
 import Register from '../views/RegisterView.vue'
+import { useUserStore } from '@/stores/user'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -10,7 +11,15 @@ const router = createRouter({
     {
       path: '/accueil',
       name: 'acceuil',
-      component: Accueil
+      component: Accueil,
+      beforeEnter: (to, from, next) => {
+        const userStore = useUserStore();
+        if (userStore.token) {
+          next();
+        } else {
+          next({ name: 'login' });
+        }
+      }
     },
     {
       path: '/',
