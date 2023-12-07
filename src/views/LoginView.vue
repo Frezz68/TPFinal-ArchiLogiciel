@@ -1,6 +1,5 @@
 <template>
-    
-    <form @submit="login">
+    <form @submit="loginClick">
         <h1>Connexion</h1>  
         <div>
             <label for="email">Email:</label>
@@ -16,12 +15,29 @@
 </template>
 
 <script lang="ts" setup>
-import { defineProps,ref } from 'vue';
+import { ref } from 'vue';
+import { useRouter } from 'vue-router';
+import { login } from '@/services/auth';
+import { useUserStore } from '@/stores/user';
+
+const router = useRouter();
+const userStore = useUserStore();
 
 const email = ref('');
 const password = ref('');
-const login = (event: Event) => {
+const loginClick = (event: Event) => {
     event.preventDefault();
+    login(email.value, password.value).then(async (response) => {
+        if (response.status === 200) {
+            const data = await response.json();
+            userStore.username = data.username;
+            userStore.token = data.token;
+            userStore.role = data.role;
+            router.push({ name: 'Home' });
+        } else {
+            console.log('Erreur de connexion');
+        }
+    })
     // Effectuer l'action de connexion ici
     console.log('Connexion avec email:', email.value, 'et mot de passe:', password.value);
 };
