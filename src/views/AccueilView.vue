@@ -3,7 +3,7 @@
 <template>
   <Navbar/>
   <div class="page-content">
-    <button v-if="userStore.role != 'B'" @click="openModal">Ajouter un livre</button>
+  <button v-if="userStore.role == 'librarian'" @click="addBook">Ajouter un livre</button>
     <BookModal ref="bookModal" @add-book="handleAddBook"/>
     <h1>Liste des Livres</h1>
     <div class="book-container">
@@ -12,8 +12,8 @@
         :key="index"
         :title="book.title"
         :author="book.author"
-        :publicationDate="book.publicationDate"
-        :description="book.description"
+        :availableCopies="book.availableCopies"
+        :genre="book.genre"
       />
     </div>
   </div>
@@ -25,6 +25,7 @@ import BookComponent from '../components/livreComponents.vue';
 import BookModal from '@/components/BookModal.vue'
 import Navbar from '../components/navbar.vue';
 import { useUserStore } from '@/stores/user';
+import { getBooks } from '@/services/serviceBook';
 
 export default defineComponent({
   components: {
@@ -34,63 +35,7 @@ export default defineComponent({
   },
   data() {
     return {
-      books: [
-        {
-          title: 'Titre du Livre 1',
-          author: 'Auteur 1',
-          publicationDate: '2022-01-01',
-          description: 'Ceci est le début de la description du livre 1.',
-        },
-        {
-          title: 'Titre du Livre 2',
-          author: 'Auteur 2',
-          publicationDate: '2022-02-15',
-          description: 'Ceci est le début de la description du livre 2.',
-        },
-        {
-          title: 'Titre du Livre 3',
-          author: 'Auteur 3',
-          publicationDate: '2022-02-15',
-          description: 'Dans un monde où la technologie et la magie se rencontrent, suivez l épopée captivante d un jeune prodige, héritier d un pouvoir ancien. Entre alliances fragiles et trahisons inattendues, l aventure dévoile des secrets enfouis depuis des siècles, mettant en péril l équilibre fragile entre les royaumes.',
-        },
-        {
-          title: 'Titre du Livre 1',
-          author: 'Auteur 1',
-          publicationDate: '2022-01-01',
-          description: 'Ceci est le début de la description du livre 1.',
-        },
-        {
-          title: 'Titre du Livre 2',
-          author: 'Auteur 2',
-          publicationDate: '2022-02-15',
-          description: 'Ceci est le début de la description du livre 2.',
-        },
-        {
-          title: 'Titre du Livre 3',
-          author: 'Auteur 3',
-          publicationDate: '2022-02-15',
-          description: 'Dans un monde où la technologie et la magie se rencontrent, suivez l épopée captivante d un jeune prodige, héritier d un pouvoir ancien. Entre alliances fragiles et trahisons inattendues, l aventure dévoile des secrets enfouis depuis des siècles, mettant en péril l équilibre fragile entre les royaumes.',
-        },
-        {
-          title: 'Titre du Livre 1',
-          author: 'Auteur 1',
-          publicationDate: '2022-01-01',
-          description: 'Ceci est le début de la description du livre 1.',
-        },
-        {
-          title: 'Titre du Livre 2',
-          author: 'Auteur 2',
-          publicationDate: '2022-02-15',
-          description: 'Ceci est le début de la description du livre 2.',
-        },
-        {
-          title: 'Titre du Livre 3',
-          author: 'Auteur 3',
-          publicationDate: '2022-02-15',
-          description: 'Dans un monde où la technologie et la magie se rencontrent, suivez l épopée captivante d un jeune prodige, héritier d un pouvoir ancien. Entre alliances fragiles et trahisons inattendues, l aventure dévoile des secrets enfouis depuis des siècles, mettant en péril l équilibre fragile entre les royaumes.',
-        },
-        // Ajoutez d'autres livres selon vos besoins
-      ] as Book[], // Assurez-vous de spécifier le type Book pour le tableau books
+      books: [] as Book[], // Assurez-vous de spécifier le type Book pour le tableau books
       userStore: useUserStore(),
       showModal: false
     };
@@ -107,13 +52,22 @@ export default defineComponent({
       // Traitez ici l'ajout du livre (envoi au serveur, ajout à une liste, etc.)
     }
   },
+  mounted() {
+    // Récupérer les livres depuis le serveur
+    console.log('Récupérer les livres depuis le serveur');
+    getBooks().then((response: Book[]) => {
+      console.log(response);
+      this.books = response;
+    }); 
+  },
 });
   
 interface Book {
+  id: number;
   title: string;
   author: string;
-  publicationDate: string;
-  description: string;
+  availableCopies: number;
+  genre: string;
 }
 </script>
 

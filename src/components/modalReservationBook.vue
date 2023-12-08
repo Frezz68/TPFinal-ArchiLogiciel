@@ -5,7 +5,8 @@
         <div>
           <p><strong>Titre:</strong> {{ title }}</p>
           <p><strong>Auteur:</strong> {{ author }}</p>
-          <p><strong>Date de publication:</strong> {{ publicationDate }}</p>
+          <p><strong>Genre :</strong> {{ genre }}</p>
+          <p><strong>Nombre de livre :</strong> {{ availableCopies }}</p>
         </div>
         <div>
           <label for="startDate">Date de début:</label>
@@ -29,8 +30,8 @@
         id: Number,
         title: String,
         author: String,
-        publicationDate: String,
-        description: String,
+        availableCopies: Number,
+        genre: String,
     },
     emits: ['close', 'reserve'],
     setup(props, { emit }) {
