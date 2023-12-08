@@ -25,7 +25,6 @@ import BookComponent from '../components/livreComponents.vue';
 import BookModal from '@/components/BookModal.vue'
 import Navbar from '../components/navbar.vue';
 import { useUserStore } from '@/stores/user';
-import { createBook } from '@/services/serviceBook';
 
 export default defineComponent({
   components: {

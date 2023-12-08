@@ -9,11 +9,11 @@
         </div>
         <div>
           <label for="startDate">Date de début:</label>
-          <input type="date" id="startDate" v-model="startDate" />
+          <input type="date" id="startDate" v-model="dateDebutReservation" />
         </div>
         <div>
           <label for="endDate">Date de fin:</label>
-          <input type="date" id="endDate" v-model="endDate" />
+          <input type="date" id="endDate" v-model="dateFinReservation" />
         </div>
         <button @click="reserveBook">Réserver</button>
         <button @click="closeModal">Fermer</button>
@@ -26,6 +26,7 @@
   
   export default {
     props: {
+        id: Number,
         title: String,
         author: String,
         publicationDate: String,
@@ -33,18 +34,19 @@
     },
     emits: ['close', 'reserve'],
     setup(props, { emit }) {
-        const startDate = ref('');
-        const endDate = ref('');
+        const dateDebutReservation = ref('');
+        const dateFinReservation = ref('');
 
         const closeModal = () => {
             emit('close');
         };
 
         const reserveBook = () => {
-            if (startDate.value && endDate.value) {
+            if ( dateDebutReservation && dateFinReservation ) {
                 emit('reserve', {
-                    startDate: startDate.value,
-                    endDate: endDate.value,
+                    dateDebutReservation: dateDebutReservation.value,
+                    dateFinReservation: dateFinReservation.value,
+                    idBook: props.id
                 });
                 closeModal();
             } else {
@@ -52,10 +54,10 @@
             }
         };
         return {
-            startDate,
-            endDate,
             closeModal,
             reserveBook,
+            dateDebutReservation,
+            dateFinReservation,
         };
     },
 };
