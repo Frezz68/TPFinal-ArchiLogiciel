@@ -12,12 +12,12 @@
           <input type="text" id="author" v-model="book.author">
         </div>
         <div>
-          <label for="publicationDate">Date de publication:</label>
-          <input type="date" id="publicationDate" v-model="book.publicationDate">
+          <label for="genre">Genre :</label>
+          <input type="string" id="genre" v-model="book.genre">
         </div>
         <div>
-          <label for="description">Description:</label>
-          <textarea id="description" v-model="book.description"></textarea>
+          <label for="availableCopies">Nombre de livre :</label>
+          <textarea id="availableCopies" v-model="book.availableCopies"></textarea>
         </div>
         <button type="submit">Ajouter</button>
         <button type="button" @click="closeModal">Annuler</button>
@@ -34,8 +34,8 @@ export default {
       book: {
         title: '',
         author: '',
-        publicationDate: '',
-        description: ''
+        genre: '',
+        availableCopies: 0
       }
     };
   },

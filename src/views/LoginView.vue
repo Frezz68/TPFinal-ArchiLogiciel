@@ -33,8 +33,10 @@ const loginClick = (event: Event) => {
         if (response.status === 200) {
             const data = await response.data;
             userStore.token = data.token;
-            console.log("token",data.userdata.role);
+            console.log("user",data.userdata._id);
             userStore.role = data.userdata.role;
+            
+            userStore.userId = data.userdata._id;
             router.push('/accueil');
         } else {
             console.log('Erreur de connexion');

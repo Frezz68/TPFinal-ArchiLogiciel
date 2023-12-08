@@ -6,32 +6,19 @@
         <p><strong>Auteur :</strong> {{ author }}</p>
         <p><strong>Genre :</strong> {{ genre }}</p>
         <p><strong>Nombre de livre :</strong> {{ availableCopies }}</p>
-        <button v-if="userStore.role == 'user'" @click="openModal">Réservation</button>
-        <book-reservation-modal
-            :title="title"
-            :author="author"
-            :availableCopies="availableCopies"
-            :genre="genre"
-            v-if="showModal"
-            @close="closeModal"
-            @reserve="reserveBook"
-        />
+        <button v-if="userStore.role == 'user'" @click="reserveBook">Réservation</button>
     </div>
 </template>
 
 <script lang="ts">
 import { defineComponent } from 'vue';
 import { useUserStore } from '@/stores/user';
-import BookReservationModal from '../components/modalReservationBook.vue';
 import { deleteBook, updateBook } from '@/services/serviceBook';
 import { reservationBook } from '@/services/serviceReservation';
 
 export default defineComponent({
-    components: {
-    BookReservationModal,
-    },
     props: {
-        id: Number,
+        id: String,
         title: String,
         author: String,
         availableCopies: Number,
@@ -39,38 +26,31 @@ export default defineComponent({
     },
     data() {
         return {
-            userStore: useUserStore(),
-            showModal: false,
+            userStore: useUserStore()
         };
     },
     methods: {
         async deleteBookClick() {
-            await deleteBook(this.id as number);
+            await deleteBook(this.id as string);
             // Supprimer le livre
             console.log('Supprimer le livre', this.title);
         },
         async editBook() {
             const data = {
-                id: this.id as number,
+                id: this.id as string,
                 title: this.title as string,
                 author: this.author as string,
                 availableCopies: this.availableCopies as number,
                 genre: this.genre as string,
             };
-            await updateBook(this.id as number,data);
+            await updateBook(this.id as string,data);
             // Modifier le livre
             console.log('Modifier le livre', this.title);
         },
-        openModal() {
-            this.showModal = true;
-        },
-        closeModal() {
-            this.showModal = false;
-        },
-        reserveBook(id: Number, dateDebutReservation: string, dateFinReservation: string) {
-            // Appeler le service pour créer le livre
-            console.log('Réserver le livre', id, dateDebutReservation, dateFinReservation);
-            var result = reservationBook(id, dateDebutReservation, dateFinReservation)
+        reserveBook() {
+            console.log('idBook', this.id as string);
+            
+            reservationBook(this.id as string)
                 .then(() => {
                     // Livre créé avec succès
                     console.log("Livre créé avec succès");
@@ -79,10 +59,6 @@ export default defineComponent({
                     // Erreur lors de la création du livre
                     console.error("Erreur lors de la création du livre :", error);
                 });
-            if (result != null) {
-                // Fermer la modal
-                this.closeModal();
-            }
         },
     },
     mounted() {

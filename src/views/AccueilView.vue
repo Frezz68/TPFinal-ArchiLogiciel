@@ -10,6 +10,7 @@
       <BookComponent
         v-for="(book, index) in books"
         :key="index"
+        :id="book._id"
         :title="book.title"
         :author="book.author"
         :availableCopies="book.availableCopies"
@@ -63,7 +64,8 @@ export default defineComponent({
 });
   
 interface Book {
-  id: number;
+  _id: string;
+  ISBN: string;
   title: string;
   author: string;
   availableCopies: number;
