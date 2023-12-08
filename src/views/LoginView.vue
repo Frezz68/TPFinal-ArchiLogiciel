@@ -33,7 +33,7 @@ const loginClick = (event: Event) => {
             userStore.username = data.username;
             userStore.token = data.token;
             userStore.role = data.role;
-            router.push({ name: 'Home' });
+            router.push({ name: 'accueil' });
         } else {
             console.log('Erreur de connexion');
         }
