@@ -2,11 +2,11 @@
 
 <template>
   <Navbar/>
-  <div>
+  <div class="page-content">
     <h1>Liste des Livres</h1>
     <div class="book-container">
       <BookComponent
-        v-for="(book, index) in this.books"
+        v-for="(book, index) in books"
         :key="index"
         :title="book.title"
         :author="book.author"
@@ -99,9 +99,13 @@ interface Book {
 </script>
 
 <style scoped>
+.page-content {
+  margin-top: 75px; /* Ajustez cette valeur en fonction de la hauteur de votre navbar */
+}
 .book-container {
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;
 }
+
 </style>
