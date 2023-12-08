@@ -18,7 +18,7 @@ describe('livreComponents', () => {
                 description: "c'est un test",
             },
             global: {
-                plugins: [pinia], // Use the new Pinia instance in the test
+                plugins: [pinia],
             },
         })
 
