@@ -9,16 +9,6 @@ interface Book {
 
 const API_URL = 'http://localhost:3001/books';
 
-// CREATE
-export async function createBook(book: Book): Promise<Book> {
-  try {
-    const response: AxiosResponse<Book> = await axios.post(API_URL, book);
-    return response.data;
-  } catch (error) {
-    throw new Error('Failed to create book');
-  }
-}
-
 // READ
 export async function getBooks(): Promise<Book[]> {
   try {
