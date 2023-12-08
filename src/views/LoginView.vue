@@ -25,6 +25,7 @@ const userStore = useUserStore();
 
 const username = ref('');
 const password = ref('');
+
 const loginClick = (event: Event) => {
     event.preventDefault();
     login(username.value, password.value).then(async (response) => {
