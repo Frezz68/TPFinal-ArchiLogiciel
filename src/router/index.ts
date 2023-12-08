@@ -12,14 +12,14 @@ const router = createRouter({
       path: '/accueil',
       name: 'acceuil',
       component: Accueil,
-      beforeEnter: (to, from, next) => {
+      /*beforeEnter: (to, from, next) => {
         const userStore = useUserStore();
         if (userStore.token) {
           next();
         } else {
           next({ name: 'login' });
         }
-      }
+      }*/
     },
     {
       path: '/',
