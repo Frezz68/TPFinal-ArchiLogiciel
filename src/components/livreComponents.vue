@@ -1,17 +1,17 @@
 <template>
     <div class="book-section">
-        <button v-if="userStore.role == 'B'" @click="deleteBookClick">Supprimer</button>
-        <button v-if="userStore.role == 'B'" @click="editBook">Modifier</button>
+        <button v-if="userStore.role == 'librarian'" @click="deleteBookClick">Supprimer</button>
+        <button v-if="userStore.role == 'librarian'" @click="editBook">Modifier</button>
         <h2>{{ title }}</h2>
         <p><strong>Auteur :</strong> {{ author }}</p>
-        <p><strong>Date de parution :</strong> {{ publicationDate }}</p>
-        <p><strong>Description :</strong> {{ truncatedDescription }}</p>
-        <button v-if="userStore.role != 'A'" @click="openModal">Réservation</button>
+        <p><strong>Genre :</strong> {{ genre }}</p>
+        <p><strong>Nombre de livre :</strong> {{ availableCopies }}</p>
+        <button v-if="userStore.role == 'user'" @click="openModal">Réservation</button>
         <book-reservation-modal
             :title="title"
             :author="author"
-            :publicationDate="publicationDate"
-            :description="description"
+            :availableCopies="availableCopies"
+            :genre="genre"
             v-if="showModal"
             @close="closeModal"
             @reserve="reserveBook"
@@ -34,20 +34,14 @@ export default defineComponent({
         id: Number,
         title: String,
         author: String,
-        publicationDate: String,
-        description: String,
+        availableCopies: Number,
+        genre: String,
     },
     data() {
         return {
             userStore: useUserStore(),
             showModal: false,
         };
-    },
-    computed: {
-        truncatedDescription(): string {
-            // Afficher les premiers 100 caractères de la description
-            return (this.description as string).substring(0, 80) + ' ...';
-        },
     },
     methods: {
         async deleteBookClick() {
@@ -57,10 +51,11 @@ export default defineComponent({
         },
         async editBook() {
             const data = {
+                id: this.id as number,
                 title: this.title as string,
                 author: this.author as string,
-                publicationDate: this.publicationDate as string,
-                description: this.description as string,
+                availableCopies: this.availableCopies as number,
+                genre: this.genre as string,
             };
             await updateBook(this.id as number,data);
             // Modifier le livre
@@ -89,6 +84,10 @@ export default defineComponent({
                 this.closeModal();
             }
         },
+    },
+    mounted() {
+        // Récupérer les livres depuis le serveur
+        console.log('Role', this.userStore.role);
     },
 });
 </script>

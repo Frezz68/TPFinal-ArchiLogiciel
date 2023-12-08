@@ -2,8 +2,8 @@
     <form @submit="loginClick">
         <h1>Connexion</h1>  
         <div>
-            <label for="email">Email:</label>
-            <input type="email" id="email" v-model="email" required>
+            <label for="username">Username :</label>
+            <input type="string" id="username" v-model="username" required>
         </div>
         <div>
             <label for="password">Mot de passe:</label>
@@ -23,22 +23,23 @@ import { useUserStore } from '@/stores/user';
 const router = useRouter();
 const userStore = useUserStore();
 
-const email = ref('');
+const username = ref('');
 const password = ref('');
 const loginClick = (event: Event) => {
     event.preventDefault();
-    login(email.value, password.value).then(async (response) => {
+    login(username.value, password.value).then(async (response) => {
+        console.log("tetete",response);
         if (response.status === 200) {
-            const data = await response.json();
-            userStore.username = data.username;
+            const data = await response.data;
             userStore.token = data.token;
-            userStore.role = data.role;
-            router.push({ name: 'accueil' });
+            console.log("token",data.userdata.role);
+            userStore.role = data.userdata.role;
+            router.push('/accueil');
         } else {
             console.log('Erreur de connexion');
         }
     })
     // Effectuer l'action de connexion ici
-    console.log('Connexion avec email:', email.value, 'et mot de passe:', password.value);
+    console.log('Connexion avec email:', username.value, 'et mot de passe:', password.value);
 };
 </script>

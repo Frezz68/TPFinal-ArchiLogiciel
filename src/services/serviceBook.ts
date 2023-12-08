@@ -1,18 +1,20 @@
 import axios, { type AxiosResponse } from 'axios';
 
 interface Book {
-    title: string;
-    author: string;
-    description: string;
-    publicationDate: string;
+  id: number;
+  title: string;
+  author: string;
+  availableCopies: number;
+  genre: string;
 }
 
-const API_URL = 'http://localhost:3001/books';
+const API_URL = 'http://localhost:5002/api/v1/users';
 
 // READ
 export async function getBooks(): Promise<Book[]> {
   try {
-    const response: AxiosResponse<Book[]> = await axios.get(API_URL);
+    const response: AxiosResponse<Book[]> = await axios.get(`${API_URL}/list-all-books`);
+    console.log(response.data);
     return response.data;
   } catch (error) {
     throw new Error('Failed to get books');
