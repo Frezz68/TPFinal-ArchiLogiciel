@@ -30,6 +30,15 @@ export async function getBookById(id: number): Promise<Book> {
   }
 }
 
+// CREATE
+export async function createBook(book: Book): Promise<Book> {
+  try {
+    const response: AxiosResponse<Book> = await axios.post(API_URL, book);
+    return response.data;
+  } catch (error) {
+    throw new Error('Failed to create book');
+  }
+}
 // UPDATE
 export async function updateBook(id: number, book: Book): Promise<Book> {
   try {

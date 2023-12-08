@@ -3,7 +3,7 @@
 <template>
   <Navbar/>
   <div class="page-content">
-  <button v-if="userStore.role == 'librarian'" @click="addBook">Ajouter un livre</button>
+  <button v-if="userStore.role == 'librarian'" @click="openModal">Ajouter un livre</button>
     <BookModal ref="bookModal" @add-book="handleAddBook"/>
     <h1>Liste des Livres</h1>
     <div class="book-container">
@@ -25,7 +25,7 @@ import BookComponent from '../components/livreComponents.vue';
 import BookModal from '@/components/BookModal.vue'
 import Navbar from '../components/navbar.vue';
 import { useUserStore } from '@/stores/user';
-import { getBooks } from '@/services/serviceBook';
+import { getBooks, createBook } from '@/services/serviceBook';
 
 export default defineComponent({
   components: {
