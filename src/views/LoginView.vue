@@ -25,12 +25,12 @@ const userStore = useUserStore();
 
 const email = ref('');
 const password = ref('');
+
 const loginClick = (event: Event) => {
     event.preventDefault();
     login(email.value, password.value).then(async (response) => {
         if (response.status === 200) {
             const data = await response.json();
-            userStore.username = data.username;
             userStore.token = data.token;
             userStore.role = data.role;
             router.push({ name: 'accueil' });
