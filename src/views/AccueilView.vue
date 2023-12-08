@@ -2,6 +2,7 @@
 
 <template>
   <Navbar/>
+  <button v-if="userStore.role == 'B'" @click="addBook">Ajouter un livre</button>
   <div>
     <h1>Liste des Livres</h1>
     <div class="book-container">
@@ -21,6 +22,8 @@
 import { defineComponent } from 'vue';
 import BookComponent from '../components/livreComponents.vue';
 import Navbar from '../components/navbar.vue';
+import { useUserStore } from '@/stores/user';
+import { createBook } from '@/services/serviceBook';
 
 export default defineComponent({
   components: {
@@ -86,7 +89,14 @@ export default defineComponent({
         },
         // Ajoutez d'autres livres selon vos besoins
       ] as Book[], // Assurez-vous de spécifier le type Book pour le tableau books
+      userStore: useUserStore(),
     };
+  },
+  methods: {
+    addBook() {
+      // Ajouter un livre
+      console.log('Ajouter un livre');
+    },
   },
 });
   
