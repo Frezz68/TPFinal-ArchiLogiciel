@@ -3,7 +3,8 @@
 <template>
   <Navbar/>
   <div class="page-content">
-  <button v-if="userStore.role == 'B'" @click="addBook">Ajouter un livre</button>
+    <button v-if="userStore.role != 'B'" @click="openModal">Ajouter un livre</button>
+    <BookModal ref="bookModal" @add-book="handleAddBook"/>
     <h1>Liste des Livres</h1>
     <div class="book-container">
       <BookComponent
@@ -21,6 +22,7 @@
 <script lang="ts">
 import { defineComponent } from 'vue';
 import BookComponent from '../components/livreComponents.vue';
+import BookModal from '@/components/BookModal.vue'
 import Navbar from '../components/navbar.vue';
 import { useUserStore } from '@/stores/user';
 import { createBook } from '@/services/serviceBook';
@@ -28,7 +30,8 @@ import { createBook } from '@/services/serviceBook';
 export default defineComponent({
   components: {
     BookComponent,
-    Navbar
+    Navbar,
+    BookModal
   },
   data() {
     return {
@@ -90,13 +93,20 @@ export default defineComponent({
         // Ajoutez d'autres livres selon vos besoins
       ] as Book[], // Assurez-vous de spécifier le type Book pour le tableau books
       userStore: useUserStore(),
+      showModal: false
     };
   },
   methods: {
-    addBook() {
-      // Ajouter un livre
-      console.log('Ajouter un livre');
-    },
+    openModal() {
+          const bookModal = this.$refs.bookModal as any & { openModal: () => void };
+
+          bookModal.openModal();
+        },
+    handleAddBook(book: Book) {
+      createBook(book);
+      console.log('Livre ajouté :', book);
+      // Traitez ici l'ajout du livre (envoi au serveur, ajout à une liste, etc.)
+    }
   },
 });
   
