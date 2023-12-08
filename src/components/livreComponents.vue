@@ -23,7 +23,7 @@
 import { defineComponent } from 'vue';
 import { useUserStore } from '@/stores/user';
 import BookReservationModal from '../components/modalReservationBook.vue';
-import { deleteBook, updateBook } from '@/services/serviceBook';
+import { createBook, deleteBook, updateBook } from '@/services/serviceBook';
 
 export default defineComponent({
     components: {
@@ -65,8 +65,6 @@ export default defineComponent({
             // Modifier le livre
             console.log('Modifier le livre', this.title);
         },
-    },
-    methods: {
         openModal() {
             this.showModal = true;
         },
@@ -75,7 +73,7 @@ export default defineComponent({
         },
         reserveBook() {
             // Appeler le service pour créer le livre
-            var result = ServiceBook.create(this.title, this.author, this.publicationDate, this.description)
+            var result = createBook(this.title, this.author, this.publicationDate, this.description)
                 .then(() => {
                     // Livre créé avec succès
                     console.log("Livre créé avec succès");
@@ -84,7 +82,7 @@ export default defineComponent({
                     // Erreur lors de la création du livre
                     console.error("Erreur lors de la création du livre :", error);
                 });
-            if (result) {
+            if (result != null) {
                 // Fermer la modal
                 this.closeModal();
             }
