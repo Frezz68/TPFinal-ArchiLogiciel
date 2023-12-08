@@ -6,15 +6,29 @@
         <p><strong>Auteur :</strong> {{ author }}</p>
         <p><strong>Date de parution :</strong> {{ publicationDate }}</p>
         <p><strong>Description :</strong> {{ truncatedDescription }}</p>
+        <button v-if="userStore.role != 'A'" @click="openModal">Réservation</button>
+        <book-reservation-modal
+            :title="title"
+            :author="author"
+            :publicationDate="publicationDate"
+            :description="description"
+            v-if="showModal"
+            @close="closeModal"
+            @reserve="reserveBook"
+        />
     </div>
 </template>
 
 <script lang="ts">
 import { defineComponent } from 'vue';
-import { deleteBook, updateBook } from '@/services/serviceBook';
 import { useUserStore } from '@/stores/user';
+import BookReservationModal from '../components/modalReservationBook.vue';
+import { deleteBook, updateBook } from '@/services/serviceBook';
 
 export default defineComponent({
+    components: {
+    BookReservationModal,
+    },
     props: {
         id: Number,
         title: String,
@@ -25,6 +39,7 @@ export default defineComponent({
     data() {
         return {
             userStore: useUserStore(),
+            showModal: false,
         };
     },
     computed: {
@@ -49,6 +64,30 @@ export default defineComponent({
             await updateBook(this.id as number,data);
             // Modifier le livre
             console.log('Modifier le livre', this.title);
+        },
+    },
+    methods: {
+        openModal() {
+            this.showModal = true;
+        },
+        closeModal() {
+            this.showModal = false;
+        },
+        reserveBook() {
+            // Appeler le service pour créer le livre
+            var result = ServiceBook.create(this.title, this.author, this.publicationDate, this.description)
+                .then(() => {
+                    // Livre créé avec succès
+                    console.log("Livre créé avec succès");
+                })
+                .catch((error) => {
+                    // Erreur lors de la création du livre
+                    console.error("Erreur lors de la création du livre :", error);
+                });
+            if (result) {
+                // Fermer la modal
+                this.closeModal();
+            }
         },
     },
 });

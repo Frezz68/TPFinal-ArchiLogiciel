@@ -2,8 +2,8 @@
 
 <template>
   <Navbar/>
+  <div class="page-content">
   <button v-if="userStore.role == 'B'" @click="addBook">Ajouter un livre</button>
-  <div>
     <h1>Liste des Livres</h1>
     <div class="book-container">
       <BookComponent
@@ -109,9 +109,13 @@ interface Book {
 </script>
 
 <style scoped>
+.page-content {
+  margin-top: 75px; /* Ajustez cette valeur en fonction de la hauteur de votre navbar */
+}
 .book-container {
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;
 }
+
 </style>
