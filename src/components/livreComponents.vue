@@ -1,5 +1,7 @@
 <template>
     <div class="book-section">
+        <button v-if="userStore.role == 'B'" @click="deleteBookClick">Supprimer</button>
+        <button v-if="userStore.role == 'B'" @click="editBook">Modifier</button>
         <h2>{{ title }}</h2>
         <p><strong>Auteur :</strong> {{ author }}</p>
         <p><strong>Date de parution :</strong> {{ publicationDate }}</p>
@@ -21,12 +23,14 @@
 import { defineComponent } from 'vue';
 import { useUserStore } from '@/stores/user';
 import BookReservationModal from '../components/modalReservationBook.vue';
+import { deleteBook, updateBook } from '@/services/serviceBook';
 
 export default defineComponent({
     components: {
     BookReservationModal,
     },
     props: {
+        id: Number,
         title: String,
         author: String,
         publicationDate: String,
@@ -41,7 +45,25 @@ export default defineComponent({
     computed: {
         truncatedDescription(): string {
             // Afficher les premiers 100 caractères de la description
-            return this.description.substring(0, 80) + ' ...';
+            return (this.description as string).substring(0, 80) + ' ...';
+        },
+    },
+    methods: {
+        async deleteBookClick() {
+            await deleteBook(this.id as number);
+            // Supprimer le livre
+            console.log('Supprimer le livre', this.title);
+        },
+        async editBook() {
+            const data = {
+                title: this.title as string,
+                author: this.author as string,
+                publicationDate: this.publicationDate as string,
+                description: this.description as string,
+            };
+            await updateBook(this.id as number,data);
+            // Modifier le livre
+            console.log('Modifier le livre', this.title);
         },
     },
     methods: {
